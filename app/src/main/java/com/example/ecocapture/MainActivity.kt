@@ -1,20 +1,54 @@
 package com.example.ecocapture
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.google.ai.client.generativeai.BuildConfig
+import com.google.ai.client.generativeai.GenerativeModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var editTextPrompt: EditText
+    private lateinit var buttonGenerate: Button
+    private lateinit var textViewResponse: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        // Initialize UI components
+        editTextPrompt = findViewById(R.id.editTextPrompt)
+        buttonGenerate = findViewById(R.id.buttonGenerate)
+        textViewResponse = findViewById(R.id.textViewResponse)
+
+        // Set click listener for the button
+        buttonGenerate.setOnClickListener {
+            val prompt = editTextPrompt.text.toString()
+            if (prompt.isNotBlank()) {
+                generateContentWithGenerativeModel(prompt)
+            } else {
+                textViewResponse.text = "Please enter a question."
+            }
+        }
+    }
+
+    private fun generateContentWithGenerativeModel(prompt: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val generativeModel = GenerativeModel(
+                modelName = "gemini-1.5-flash",
+                apiKey = "AIzaSyBXY45dfxtzWv86augDtxgt86X69p4h3nI"
+            )
+
+            val response = generativeModel.generateContent(prompt)
+
+            // Update the response in the UI thread
+            runOnUiThread {
+                textViewResponse.text = response.text
+            }
         }
     }
 }
