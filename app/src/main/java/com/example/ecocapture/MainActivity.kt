@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
             // GenerativeModel 객체 생성 및 API 키 설정
             val generativeModel = GenerativeModel(
                 modelName = "gemini-1.5-flash",
-                apiKey = "Your API Key" //본인의 제미나이 API 코드 입력
+                apiKey = "Your API Key" //본인의 제미나이 API 코드
             )
 
             // 모델을 사용해 콘텐츠 생성
