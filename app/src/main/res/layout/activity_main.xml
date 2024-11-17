@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
-            android:text="Response will appear here"
+            android:text="궁금한걸 물어보세요~"
             android:textSize="16sp" />
     </LinearLayout>
 </ScrollView>
