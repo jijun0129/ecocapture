@@ -21,8 +21,11 @@
         android:theme="@style/Theme.Ecocapture"
         tools:targetApi="31">
         <activity
+            android:name=".ArticleDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".MenuActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

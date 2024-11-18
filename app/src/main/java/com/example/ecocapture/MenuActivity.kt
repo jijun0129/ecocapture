@@ -44,6 +44,13 @@ class MenuActivity : AppCompatActivity()
             if (articles.isNotEmpty()) {
                 val randomArticle = articles.random() // 랜덤으로 하나 선택
                 binding.randomTitleTextView.text = randomArticle.first // 기사 제목 표시
+                binding.randomTitleTextView.setOnClickListener {
+                    val intent = Intent(this, ArticleDetailActivity::class.java).apply {
+                        putExtra("article_title", randomArticle.first)
+                        putExtra("article_link", randomArticle.second)
+                    }
+                    startActivity(intent)
+                }
             }
         })
         // 기사 데이터 가져오기
