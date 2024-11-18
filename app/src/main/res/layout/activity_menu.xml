@@ -8,6 +8,14 @@
     android:orientation="vertical"
     tools:context=".MenuActivity">
 
+    <TextView
+        android:id="@+id/randomTitleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=" "
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
     <Button
         android:id="@+id/btn_image"
         android:layout_width="wrap_content"
