@@ -45,7 +45,7 @@ class TextActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             val generativeModel = GenerativeModel(
                 modelName = "gemini-1.5-flash",
-                apiKey = "API Key"
+                apiKey = ApiKey.API_KEY
             )
 
             val response = generativeModel.generateContent(prompt)

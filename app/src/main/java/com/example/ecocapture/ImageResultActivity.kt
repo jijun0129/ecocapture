@@ -41,7 +41,7 @@ class ImageResultActivity : AppCompatActivity()
         CoroutineScope(Dispatchers.IO).launch {
             val generativeModel = GenerativeModel(
                 modelName = "gemini-1.5-flash",
-                apiKey = "Api key"
+                apiKey = ApiKey.API_KEY
             )
 
             val inputContent = content {
