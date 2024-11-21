@@ -14,3 +14,6 @@ out/
 # 기타
 local.properties
 .gradle/
+
+# gemini api key
+ApiKey.*
