@@ -10,9 +10,17 @@
     android:background="@color/background">
 
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/background"/>
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/background">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ecocapture"/>
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -66,6 +74,7 @@
             android:gravity="center"
             android:orientation="vertical"
             android:paddingVertical="40dp"
+            android:elevation="1dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
@@ -97,6 +106,7 @@
             android:gravity="center"
             android:orientation="vertical"
             android:paddingVertical="40dp"
+            android:elevation="1dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_image">
