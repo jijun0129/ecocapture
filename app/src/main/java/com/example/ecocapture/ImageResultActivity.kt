@@ -25,7 +25,12 @@ class ImageResultActivity : AppCompatActivity()
         binding = ActivityImageResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initEvents()
+        // 툴바
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+//        initEvents()
 
         val base64Image = intent.getStringExtra("imageBase64")
         if (base64Image != null)
@@ -58,12 +63,15 @@ class ImageResultActivity : AppCompatActivity()
         }
     }
 
+    /*
     private fun initEvents()
     {
         binding.buttonBack.setOnClickListener {
             finish()
         }
     }
+
+     */
 
     private fun setImage(bitmapImage : Bitmap)
     {

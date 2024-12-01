@@ -18,6 +18,7 @@ class MenuActivity : AppCompatActivity()
         binding = ActivityMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 툴바
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 

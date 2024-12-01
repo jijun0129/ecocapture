@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ImageResultActivity"
+    android:background="@color/background">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/background">
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- EditText for user input -->
+            <EditText
+                android:id="@+id/editTextPrompt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextStyle_24"
+                android:textColor="@color/black"
+                android:hint="입력하세요"
+                android:textColorHint="@color/light_gray"/>
+
+            <!-- Button to generate content -->
+            <Button
+                android:id="@+id/buttonGenerate"
+                style="@style/TextStyle_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_default"
+                android:text="검색"
+                android:textColor="@color/black"
+                android:textFontWeight="600" />
+
+            <!-- TextView to display the generated response -->
+            <TextView
+                android:id="@+id/textViewResponse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                style="@style/TextStyle_16"
+                android:textFontWeight="400"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

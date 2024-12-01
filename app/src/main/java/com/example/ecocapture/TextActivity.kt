@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ecocapture.databinding.ActivityTextBinding
 import com.google.ai.client.generativeai.GenerativeModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,13 +18,22 @@ class TextActivity : AppCompatActivity() {
     private lateinit var buttonGenerate: Button
     private lateinit var textViewResponse: TextView
 
+    lateinit var binding : ActivityTextBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_text)
 
         editTextPrompt = findViewById(R.id.editTextPrompt)
         buttonGenerate = findViewById(R.id.buttonGenerate)
         textViewResponse = findViewById(R.id.textViewResponse)
+
+        binding = ActivityTextBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        // 툴바
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         buttonGenerate.setOnClickListener {
             // 로컬 변수로 prompt 선언

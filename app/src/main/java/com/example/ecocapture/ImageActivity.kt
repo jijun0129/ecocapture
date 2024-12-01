@@ -35,6 +35,11 @@ class ImageActivity : AppCompatActivity()
         binding = ActivityImageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 툴바
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val contract1 = ActivityResultContracts.StartActivityForResult()
         cameraLauncher = registerForActivityResult(contract1)
         {
