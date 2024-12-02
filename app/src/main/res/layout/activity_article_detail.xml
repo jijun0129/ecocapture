@@ -4,29 +4,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@color/background">
 
-    <TextView
-        android:id="@+id/titleTextView"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="기사 제목"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:paddingBottom="8dp" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/background">
+    </androidx.appcompat.widget.Toolbar>
 
-    <TextView
-        android:id="@+id/linkTextView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="기사 링크"
-        android:textSize="16sp"
-        android:autoLink="web"
-        android:paddingBottom="8dp" />
+        android:layout_height="match_parent"
+        android:paddingHorizontal="24dp"
+        android:orientation="vertical">
 
-    <WebView
-        android:id="@+id/webView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="기사 제목"
+            style="@style/TextStyle_24"
+            android:textFontWeight="600"
+            android:layout_marginTop="24dp"/>
+
+        <TextView
+            android:id="@+id/linkTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="기사 링크"
+            style="@style/TextStyle_16"
+            android:textFontWeight="400"
+            android:autoLink="web"
+            android:layout_marginTop="16dp"/>
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="16dp"/>
+    </LinearLayout>
+
 </LinearLayout>

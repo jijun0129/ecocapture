@@ -22,6 +22,11 @@ class ArticleDetailActivity : AppCompatActivity() {
         binding = ActivityArticleDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 툴바
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val title = intent.getStringExtra("article_title") ?: "제목 없음"
         val link = intent.getStringExtra("article_link") ?: "링크 없음"
 
