@@ -31,7 +31,7 @@ class ImageActivity : AppCompatActivity()
     lateinit var galleryLauncher : ActivityResultLauncher<Intent>
     val CAMERA_PERMISSION_CODE = 100
     val GALLERY_PERMISSION_CODE = 200
-    lateinit var imageUri : Uri
+    var imageUri : Uri? = null
     var isImageOnCamera = 0 // 이미지 소스 여부 (0 : 카메라, 1 : 갤러리)
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -70,7 +70,7 @@ class ImageActivity : AppCompatActivity()
         {
             if (it?.resultCode == RESULT_OK && it.data != null)
             {
-                val imageUri = it.data?.data
+                imageUri = it.data?.data
                 imageUri?.let { uri ->
                     val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // API 28 이상
                         val source = ImageDecoder.createSource(contentResolver, uri)
