@@ -20,12 +20,19 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.ecocapture.databinding.ActivityImageBinding
 import java.io.ByteArrayOutputStream
 import android.Manifest
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.util.Log
 
 class ImageActivity : AppCompatActivity()
 {
     lateinit var binding : ActivityImageBinding
     lateinit var cameraLauncher : ActivityResultLauncher<Intent>
-    var CAMERA_PERMISSION_CODE = 100
+    lateinit var galleryLauncher : ActivityResultLauncher<Intent>
+    val CAMERA_PERMISSION_CODE = 100
+    val GALLERY_PERMISSION_CODE = 200
+    lateinit var imageUri : Uri
+    var isImageOnCamera = 0 // 이미지 소스 여부 (0 : 카메라, 1 : 갤러리)
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -55,6 +62,25 @@ class ImageActivity : AppCompatActivity()
                     val bitmap = it.data?.getParcelableExtra<Bitmap>("data")!!
                     binding.image.setImageBitmap(bitmap)
                 }
+                isImageOnCamera = 0
+            }
+        }
+
+        galleryLauncher = registerForActivityResult(contract1)
+        {
+            if (it?.resultCode == RESULT_OK && it.data != null)
+            {
+                val imageUri = it.data?.data
+                imageUri?.let { uri ->
+                    val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // API 28 이상
+                        val source = ImageDecoder.createSource(contentResolver, uri)
+                        ImageDecoder.decodeBitmap(source)
+                    } else { // API 27 이하
+                        MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                    }
+                    binding.image.setImageBitmap(bitmap)
+                }
+                isImageOnCamera = 1
             }
         }
 
@@ -76,14 +102,35 @@ class ImageActivity : AppCompatActivity()
             }
         }
 
+        // 갤러리 실행
+        binding.buttonSelectImage.setOnClickListener {
+            if (isGalleryPermissionGranted()) // 갤러리(외부 저장소) 접근 권한 승인이 되면
+            {
+                launchGallery() // 갤러리 앱 실행
+            }
+            else
+            {
+                requestGalleryPermission() // 아니면 갤러리 권한 승인 요청
+            }
+        }
+
         // 이미지를 결과 액티비티로 전송
         binding.buttonTransferImage.setOnClickListener {
-            val bitmap = getImageFromImageView()
-            if (bitmap != null)
+            if (isImageOnCamera == 0) // 카메라로 찍은 이미지일 경우
             {
-                val base64 = encodeBitmapToBase64(bitmap)
+                val bitmap = getImageFromImageView()
+                if (bitmap != null)
+                {
+                    val base64 = encodeBitmapToBase64(bitmap)
+                    val intent = Intent(this, ImageResultActivity::class.java)
+                    intent.putExtra("imageBase64", base64)
+                    startActivity(intent)
+                }
+            }
+            else // 갤러리에서 선택한 이미지일 경우
+            {
                 val intent = Intent(this, ImageResultActivity::class.java)
-                intent.putExtra("imageBase64", base64)
+                intent.putExtra("imageUri", imageUri.toString())
                 startActivity(intent)
             }
         }
@@ -118,6 +165,51 @@ class ImageActivity : AppCompatActivity()
         cameraLauncher.launch(newIntent)
     }
 
+    // 갤러리 실행
+    private fun launchGallery() {
+        val newIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        intent.type = "image/*"
+        galleryLauncher.launch(newIntent)
+    }
+
+    // 갤러리 권한 요청 확인
+    private fun isGalleryPermissionGranted(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) // API 33 이상
+        {
+            return ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_MEDIA_IMAGES
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+        else // API 32 이하
+        {
+            return ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    // 갤러리 권한 요청
+    private fun requestGalleryPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) // API 33 이상
+        {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_MEDIA_IMAGES),
+                GALLERY_PERMISSION_CODE
+            )
+        }
+        else // API 32 이하
+        {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                GALLERY_PERMISSION_CODE
+            )
+        }
+    }
+
     // 카메라 권한 요청 확인
     private fun isCameraPermissionGranted(): Boolean {
         return ContextCompat.checkSelfPermission(
@@ -142,7 +234,7 @@ class ImageActivity : AppCompatActivity()
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CAMERA_PERMISSION_CODE) {
+        if (requestCode == CAMERA_PERMISSION_CODE) { // 카메라 권한 요청 처리
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Camera permission granted", Toast.LENGTH_SHORT).show()
                 launchCamera()
@@ -150,6 +242,18 @@ class ImageActivity : AppCompatActivity()
                 Toast.makeText(
                     this,
                     "Camera permission is required to use this feature",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        else if (requestCode == GALLERY_PERMISSION_CODE) { // 갤러리(외부 저장소) 권한 요청 처리
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Gallery permission granted", Toast.LENGTH_SHORT).show()
+                launchGallery()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Gallery permission is required to use this feature",
                     Toast.LENGTH_SHORT
                 ).show()
             }
