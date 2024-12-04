@@ -9,6 +9,8 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 
     <application
         android:allowBackup="true"
@@ -38,7 +40,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.test.getpicture.file_provider"
+            android:authorities="com.test.getcapture.file_provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

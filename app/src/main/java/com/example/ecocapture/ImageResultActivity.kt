@@ -2,12 +2,19 @@ package com.example.ecocapture
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Base64
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.collection.emptyLongSet
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.ecocapture.databinding.ActivityImageResultBinding
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
@@ -33,12 +40,39 @@ class ImageResultActivity : AppCompatActivity()
 //        initEvents()
 
         val base64Image = intent.getStringExtra("imageBase64")
+        val imageUriString = intent.getStringExtra("imageUri")
+
         if (base64Image != null)
         {
             val imageBytes = Base64.decode(base64Image, Base64.DEFAULT)
             val image: Bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
             setImage(image)
             generateContentWithGenerativeModel(image) // GenerativeModel을 사용하여 컨텐츠 생성
+        }
+        else if (imageUriString != null)
+        {
+            val imageUri = Uri.parse(imageUriString)
+
+            lifecycleScope.launch {
+                try {
+                    val image = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        val source = ImageDecoder.createSource(contentResolver, imageUri)
+                        ImageDecoder.decodeBitmap(source)
+                    }
+                    else
+                    {
+                        MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+                    }
+
+                    setImage(image)
+                    generateContentWithGenerativeModel(image) // GenerativeModel을 사용하여 컨텐츠 생성
+
+                }
+                catch (e: Exception)
+                {
+                    Toast.makeText(this@ImageResultActivity, "이미지를 불러오는 데 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
