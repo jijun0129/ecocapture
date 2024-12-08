@@ -1,9 +1,11 @@
 package com.example.ecocapture
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,10 +34,12 @@ class Tab2Fragment : Fragment() {
     }
 }
 
-class ResultAdapter(private val data: List<Pair<String, String>>) :
+
+class ResultAdapter(private val data: List<Triple<ByteArray?, String, String>>) :
     RecyclerView.Adapter<ResultAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val imageView: ImageView = itemView.findViewById(R.id.imageView)
         val textSearch: TextView = itemView.findViewById(R.id.textSearch)
         val textResult: TextView = itemView.findViewById(R.id.textResult)
     }
@@ -47,10 +51,22 @@ class ResultAdapter(private val data: List<Pair<String, String>>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val (searchText, resultText) = data[position]
+        val (image, searchText, resultText) = data[position]
+
+        // 텍스트 설정
         holder.textSearch.text = searchText
         holder.textResult.text = resultText
+
+        // 이미지가 있는 경우 설정
+        if (image != null) {
+            val bitmap = BitmapFactory.decodeByteArray(image, 0, image.size)
+            holder.imageView.setImageBitmap(bitmap)
+            holder.imageView.visibility = View.VISIBLE // 이미지 표시
+        } else {
+            holder.imageView.visibility = View.GONE // 이미지 숨김
+        }
     }
 
     override fun getItemCount(): Int = data.size
 }
+

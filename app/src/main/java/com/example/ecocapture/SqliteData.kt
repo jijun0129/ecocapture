@@ -4,6 +4,9 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.graphics.Bitmap
+import android.widget.Toast
+import java.io.ByteArrayOutputStream
 
 class MyDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -45,23 +48,25 @@ class MyDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         onCreate(db)
     }
 
-    fun getAllResults(): List<Pair<String, String>> {
+    fun getAllResults(): List<Triple<ByteArray?, String, String>> {
         val db = readableDatabase
         val cursor = db.query(
             TABLE_NAME,
-            arrayOf(COLUMN_SEARCH_TEXT, COLUMN_RESULT_TEXT),
+            arrayOf(COLUMN_IMAGE, COLUMN_SEARCH_TEXT, COLUMN_RESULT_TEXT),
             null, null, null, null, null
         )
 
-        val results = mutableListOf<Pair<String, String>>()
+        val results = mutableListOf<Triple<ByteArray?, String, String>>()
         with(cursor) {
             while (moveToNext()) {
-                val searchText = getString(getColumnIndexOrThrow(COLUMN_SEARCH_TEXT))
+                val image = getBlob(getColumnIndexOrThrow(COLUMN_IMAGE))
+                val searchText = getString(getColumnIndexOrThrow(COLUMN_SEARCH_TEXT)) ?: "N/A"
                 val resultText = getString(getColumnIndexOrThrow(COLUMN_RESULT_TEXT))
-                results.add(Pair(searchText, resultText))
+                results.add(Triple(image, searchText, resultText))
             }
             close()
         }
         return results
     }
+
 }

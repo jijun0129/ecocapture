@@ -21,6 +21,7 @@ import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 
 class ImageResultActivity : AppCompatActivity()
 {
@@ -76,26 +77,55 @@ class ImageResultActivity : AppCompatActivity()
         }
     }
 
+    private fun getBitmapAsByteArray(bitmap: Bitmap): ByteArray {
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        return outputStream.toByteArray()
+    }
+
+    private fun saveResultToDatabase(image: Bitmap, resultText: String) {
+        val dbHelper = MyDatabaseHelper(this)
+
+        // Bitmap -> ByteArray 변환
+        val imageByteArray = getBitmapAsByteArray(image)
+
+        // 입력 텍스트는 null로 저장
+        val searchText = ""
+
+        // 데이터베이스에 저장
+        dbHelper.insertResult(imageByteArray, searchText, resultText)
+    }
+
     private fun generateContentWithGenerativeModel(image: Bitmap) {
         CoroutineScope(Dispatchers.IO).launch {
-            val generativeModel = GenerativeModel(
-                modelName = "gemini-1.5-flash",
-                apiKey = ApiKey.API_KEY
-            )
+            try {
+                val generativeModel = GenerativeModel(
+                    modelName = "gemini-1.5-flash",
+                    apiKey = ApiKey.API_KEY
+                )
 
-            val inputContent = content {
-                image(image)
-                text("이 이미지에 나온 물건 어떻게 분리수거 하는 지 알려줘.")
-            }
+                val inputContent = content {
+                    image(image)
+                    text("이 이미지에 나온 물건 어떻게 분리수거 하는 지 알려줘.")
+                }
 
-            val response = generativeModel.generateContent(inputContent)
+                val response = generativeModel.generateContent(inputContent)
 
-            // 생성된 내용을 UI에 반영하기 위해 UI 스레드로 전환
-            runOnUiThread {
-                binding.textRecycle.setText(response.text) // 생성된 텍스트를 TextView에 설정
+                // 생성된 내용을 UI에 반영하기 위해 UI 스레드로 전환
+                runOnUiThread {
+                    binding.textRecycle.setText(response.text) // 생성된 텍스트를 TextView에 설정
+
+                    // 데이터 저장
+                    saveResultToDatabase(image, response.text ?: "")
+                }
+            } catch (e: Exception) {
+                runOnUiThread {
+                    Toast.makeText(this@ImageResultActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
+
 
     /*
     private fun initEvents()

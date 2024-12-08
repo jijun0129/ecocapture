@@ -5,6 +5,14 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone" /> <!-- 기본은 숨김 -->
+
     <TextView
         android:id="@+id/textSearch"
         android:layout_width="match_parent"
