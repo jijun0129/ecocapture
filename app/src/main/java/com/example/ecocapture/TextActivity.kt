@@ -58,13 +58,23 @@ class TextActivity : AppCompatActivity() {
                     modelName = "gemini-1.5-flash",
                     apiKey = ApiKey.API_KEY
                 )
-
                 val response = generativeModel.generateContent(prompt)
 
                 // 결과를 UI 스레드에서 처리
                 runOnUiThread {
+                    val responseText = response.text
+
+                    // 데이터베이스에 저장
+                    val dbHelper = MyDatabaseHelper(this@TextActivity)
+                    dbHelper.insertResult(
+                        image = null, // 현재 이미지는 null로 처리 (추가 가능)
+                        searchText = prompt,
+                        resultText = responseText ?: ""
+                    )
+
+                    // 결과를 TextResultActivity로 전달
                     val intent = Intent(this@TextActivity, TextResultActivity::class.java)
-                    intent.putExtra("responseText", response.text)
+                    intent.putExtra("responseText", responseText)
 
                     // 버튼 활성화 및 액티비티 이동
                     binding.buttonGenerate.isEnabled = true
@@ -79,4 +89,5 @@ class TextActivity : AppCompatActivity() {
             }
         }
     }
+
 }
