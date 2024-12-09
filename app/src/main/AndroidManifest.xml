@@ -9,8 +9,8 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
         android:allowBackup="true"
@@ -22,12 +22,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ecocapture"
         tools:targetApi="31">
-
+        <activity
+            android:name=".LogDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".ArticleDetailActivity"
             android:exported="false"
-            android:parentActivityName=".MenuActivity"/>
-
+            android:parentActivityName=".MenuActivity" />
         <activity
             android:name=".MenuActivity"
             android:exported="true">

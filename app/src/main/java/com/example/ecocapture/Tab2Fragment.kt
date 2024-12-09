@@ -1,5 +1,6 @@
 package com.example.ecocapture
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -27,7 +28,17 @@ class Tab2Fragment : Fragment() {
         val results = dbHelper.getAllResults()
 
         // 어댑터 연결
-        val adapter = ResultAdapter(results)
+        val adapter = ResultAdapter(results) { item ->
+            val (image, searchText, resultText) = item
+
+            // 새로운 액티비티로 데이터 전달
+            val intent = Intent(requireContext(), LogDetailActivity::class.java).apply {
+                putExtra("image", image)
+                putExtra("searchText", searchText)
+                putExtra("resultText", resultText)
+            }
+            startActivity(intent)
+        }
         recyclerView.adapter = adapter
 
         return view
@@ -35,8 +46,11 @@ class Tab2Fragment : Fragment() {
 }
 
 
-class ResultAdapter(private val data: List<Triple<ByteArray?, String, String>>) :
-    RecyclerView.Adapter<ResultAdapter.ViewHolder>() {
+
+class ResultAdapter(
+    private val data: List<Triple<ByteArray?, String, String>>,
+    private val onItemClick: (Triple<ByteArray?, String, String>) -> Unit
+) : RecyclerView.Adapter<ResultAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
@@ -51,7 +65,8 @@ class ResultAdapter(private val data: List<Triple<ByteArray?, String, String>>) 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val (image, searchText, resultText) = data[position]
+        val item = data[position]
+        val (image, searchText, resultText) = item
 
         // 텍스트 설정
         holder.textSearch.text = searchText
@@ -65,8 +80,14 @@ class ResultAdapter(private val data: List<Triple<ByteArray?, String, String>>) 
         } else {
             holder.imageView.visibility = View.GONE // 이미지 숨김
         }
+
+        // 아이템 클릭 리스너 설정
+        holder.itemView.setOnClickListener {
+            onItemClick(item)
+        }
     }
 
     override fun getItemCount(): Int = data.size
 }
+
 
