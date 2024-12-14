@@ -13,6 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class Tab2Fragment : Fragment() {
+
+    private lateinit var adapter: ResultAdapter
+    private lateinit var dbHelper: MyDatabaseHelper
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -23,15 +27,14 @@ class Tab2Fragment : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        // 데이터베이스에서 데이터 가져오기
-        val dbHelper = MyDatabaseHelper(requireContext())
+        // 데이터베이스 초기화
+        dbHelper = MyDatabaseHelper(requireContext())
         val results = dbHelper.getAllResults()
 
         // 어댑터 연결
-        val adapter = ResultAdapter(results) { item ->
+        adapter = ResultAdapter(results) { item ->
             val (image, searchText, resultText) = item
 
-            // 새로운 액티비티로 데이터 전달
             val intent = Intent(requireContext(), LogDetailActivity::class.java).apply {
                 putExtra("image", image)
                 putExtra("searchText", searchText)
@@ -43,12 +46,20 @@ class Tab2Fragment : Fragment() {
 
         return view
     }
+
+    override fun onResume() {
+        super.onResume()
+
+        // 데이터베이스에서 최신 데이터를 가져와 어댑터 갱신
+        val updatedResults = dbHelper.getAllResults()
+        adapter.updateData(updatedResults)
+    }
 }
 
 
 
 class ResultAdapter(
-    private val data: List<Triple<ByteArray?, String, String>>,
+    private var data: List<Triple<ByteArray?, String, String>>,
     private val onItemClick: (Triple<ByteArray?, String, String>) -> Unit
 ) : RecyclerView.Adapter<ResultAdapter.ViewHolder>() {
 
@@ -68,26 +79,30 @@ class ResultAdapter(
         val item = data[position]
         val (image, searchText, resultText) = item
 
-        // 텍스트 설정
         holder.textSearch.text = searchText
         holder.textResult.text = resultText
 
-        // 이미지가 있는 경우 설정
         if (image != null) {
             val bitmap = BitmapFactory.decodeByteArray(image, 0, image.size)
             holder.imageView.setImageBitmap(bitmap)
-            holder.imageView.visibility = View.VISIBLE // 이미지 표시
+            holder.imageView.visibility = View.VISIBLE
         } else {
-            holder.imageView.visibility = View.GONE // 이미지 숨김
+            holder.imageView.visibility = View.GONE
         }
 
-        // 아이템 클릭 리스너 설정
         holder.itemView.setOnClickListener {
             onItemClick(item)
         }
     }
 
     override fun getItemCount(): Int = data.size
+
+    // 데이터 갱신 메서드 추가
+    fun updateData(newData: List<Triple<ByteArray?, String, String>>) {
+        this.data = newData
+        notifyDataSetChanged()
+    }
 }
+
 
 
