@@ -45,41 +45,48 @@
                 <Button
                     android:id="@+id/button_upload_image"
                     style="@style/TextStyle_16"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
                     android:background="@drawable/btn_default"
-                    android:padding="16dp"
-                    android:text="이미지 업로드"
-                    android:textColor="@color/black"
+                    android:elevation="8dp"
+                    android:padding="8dp"
+                    android:text="카메라로 촬영"
+                    android:textColor="@color/white"
                     android:textFontWeight="600"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/button_select_image"
                     style="@style/TextStyle_16"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
                     android:background="@drawable/btn_default"
-                    android:padding="16dp"
+                    android:elevation="8dp"
+                    android:padding="8dp"
                     android:text="갤러리에서 선택"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textFontWeight="600"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
                 android:id="@+id/button_transfer_image"
                 style="@style/TextStyle_16"
-                android:layout_marginTop="50dp"
+                android:layout_marginVertical="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_default"
-                android:padding="16dp"
+                android:padding="8dp"
+                android:elevation="8dp"
                 android:text="분리배출 방법 검색"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textFontWeight="600" />
         </LinearLayout>
 
