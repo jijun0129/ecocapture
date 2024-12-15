@@ -48,7 +48,6 @@
                 android:id="@+id/text_recycle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:textColor="@color/black"
                 style="@style/TextStyle_16"
                 android:hint="(분리수거 내용)"
