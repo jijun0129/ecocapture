@@ -33,20 +33,23 @@
                 android:id="@+id/editTextPrompt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/TextStyle_24"
+                style="@style/TextStyle_20"
                 android:textColor="@color/black"
-                android:hint="입력하세요"
+                android:hint="터치하여 입력"
                 android:textColorHint="@color/light_gray"/>
 
             <!-- Button to generate content -->
             <Button
                 android:id="@+id/buttonGenerate"
                 style="@style/TextStyle_16"
-                android:layout_width="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_default"
-                android:text="검색"
-                android:textColor="@color/black"
+                android:padding="8dp"
+                android:elevation="8dp"
+                android:text="분리배출 방법 검색"
+                android:textColor="@color/white"
                 android:textFontWeight="600" />
 
             <!-- TextView to display the generated response -->
