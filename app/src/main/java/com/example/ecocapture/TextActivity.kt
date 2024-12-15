@@ -35,7 +35,15 @@ class TextActivity : AppCompatActivity() {
             if (prompt.isNotBlank()) {
                 // 입력값이 단순한 제품명이라면 질문 형식으로 변환
                 val formattedPrompt = if (!prompt.contains("?") && !prompt.contains("어떻게")) {
-                    "$prompt 의 분리수거 방법을 알려줘"
+                    """
+                        "$prompt" 에 대한 분리배출 방법을 아래의 형식을 따르며 친근한 존댓말로, 구체적으로 설명하라.
+                        텍스트 꾸밈(예: **, -, 등)을 사용하지 않는다.
+                        2024년 4분기 대한민국의 일반적인 정책을 따른다.
+                        
+                        재활용: (가능, 불가능을 문장으로. 네, 아니요는 하지 않음)
+                        분리배출 방법: (번호.를 매겨서 설명)
+                        주의 사항:
+                    """.trimIndent()
                 } else {
                     prompt
                 }
