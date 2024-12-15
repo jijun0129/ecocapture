@@ -27,7 +27,7 @@ class MenuActivity : AppCompatActivity() {
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {
-                0 -> "검색학기"
+                0 -> "검색하기"
                 1 -> "기록보기"
                 else -> null
             }
