@@ -51,14 +51,14 @@ class TextActivity : AppCompatActivity() {
                 // 로딩 메시지 표시
                 binding.textViewResponse.text = "결과를 불러오고 있습니다..."
                 binding.buttonGenerate.isEnabled = false // 버튼 비활성화
-                generateContentWithGenerativeModel(formattedPrompt)
+                generateContentWithGenerativeModel(prompt, formattedPrompt)
             } else {
                 binding.textViewResponse.text = "질문을 입력해 주세요."
             }
         }
     }
 
-    private fun generateContentWithGenerativeModel(prompt: String) {
+    private fun generateContentWithGenerativeModel(prompt: String, formattedPrompt: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 // GenerativeModel 생성 및 API 호출
@@ -66,7 +66,7 @@ class TextActivity : AppCompatActivity() {
                     modelName = "gemini-1.5-flash",
                     apiKey = ApiKey.API_KEY
                 )
-                val response = generativeModel.generateContent(prompt)
+                val response = generativeModel.generateContent(formattedPrompt)
 
                 // 결과를 UI 스레드에서 처리
                 runOnUiThread {

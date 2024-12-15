@@ -53,7 +53,7 @@ class MyDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         val cursor = db.query(
             TABLE_NAME,
             arrayOf(COLUMN_IMAGE, COLUMN_SEARCH_TEXT, COLUMN_RESULT_TEXT),
-            null, null, null, null, null
+            null, null, null, null, "$COLUMN_ID DESC", "20"
         )
 
         val results = mutableListOf<Triple<ByteArray?, String, String>>()
