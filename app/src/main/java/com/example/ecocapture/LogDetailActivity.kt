@@ -12,6 +12,11 @@ class LogDetailActivity : AppCompatActivity() {
         val binding = ActivityLogDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 툴바
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         // Intent로 전달된 데이터 받기
         val imageBytes = intent.getByteArrayExtra("image")
         val searchText = intent.getStringExtra("searchText")
