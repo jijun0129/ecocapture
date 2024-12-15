@@ -27,8 +27,9 @@
 
             <ImageView
                 android:id="@+id/imageViewDetail"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
                 android:layout_height="200dp"
+                android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 android:visibility="gone" />
 
@@ -36,16 +37,19 @@
                 android:id="@+id/textSearchDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp" />
+                style="@style/TextStyle_20"
+                android:textFontWeight="600"
+                android:gravity="center"
+                android:layout_marginTop="20dp" />
 
             <TextView
                 android:id="@+id/textResultDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp" />
+                style="@style/TextStyle_16"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="80dp"
+                android:layout_marginHorizontal="16dp"/>
         </LinearLayout>
     </ScrollView>
 
